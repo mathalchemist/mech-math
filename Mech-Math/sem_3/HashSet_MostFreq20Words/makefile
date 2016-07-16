@@ -1,0 +1,1 @@
+Disp), X, Y, Width, Height, 0, BlackPixel(Disp, Scr), 
