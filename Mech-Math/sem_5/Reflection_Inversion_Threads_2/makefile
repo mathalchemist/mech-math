@@ -1,0 +1,1 @@
+   Win = XCreateSimpleWindow(Disp, DefaultRootWindow(
