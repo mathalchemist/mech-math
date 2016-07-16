@@ -1,6 +1,6 @@
-# Mech-Math MSU programms
+# Mech-Math MSU programs
 
-This repository is a base of all Mech-Math MSU programms which will help you not only to somehow pass 4 yeras of programming, but also to learn something.
+This repository is a base of all Mech-Math MSU programs which will help you not only to somehow pass 4 yeras of programming, but also to learn something.
 
 There are lot of serious problems with the archive at [DMVN](http://dmvn.mexmat.ru/prog.php):
   1. Last time it was updated in 2006.
