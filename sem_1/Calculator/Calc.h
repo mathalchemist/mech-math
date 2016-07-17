@@ -10,34 +10,34 @@
 
 #define MAX_LENGTH 10000
 
-class TNum
-{
-   char * Data;
-public:
-   TNum(void);
-   TNum(int X);
-   TNum(TNum& N);
-   ~TNum(void);
-   void Write(char * FileName);
-   void Display(void);
-   int GetLength(void);
-   TNum& operator = (TNum& N);
-   TNum& operator = (int N);
-   bool operator == (TNum& N);
-   bool operator == (int N);
-   bool operator != (TNum& N);
-   bool operator != (int N);
-   TNum& operator ++ (int);
-   TNum& operator ++ (void);
-   TNum& operator -- (int);
-   TNum& operator -- (void);
-   TNum& operator += (TNum& N);
-   TNum& operator += (int N);
-   TNum& operator -= (TNum& N);
-   TNum& operator -= (int N);
+class TNum {
+  char *Data;
 
-   TNum& operator *= (TNum& N);
-   TNum& operator *= (int N);
+public:
+  TNum(void);
+  TNum(int X);
+  TNum(TNum &N);
+  ~TNum(void);
+  void Write(char *FileName);
+  void Display(void);
+  int GetLength(void);
+  TNum &operator=(TNum &N);
+  TNum &operator=(int N);
+  bool operator==(TNum &N);
+  bool operator==(int N);
+  bool operator!=(TNum &N);
+  bool operator!=(int N);
+  TNum &operator++(int);
+  TNum &operator++(void);
+  TNum &operator--(int);
+  TNum &operator--(void);
+  TNum &operator+=(TNum &N);
+  TNum &operator+=(int N);
+  TNum &operator-=(TNum &N);
+  TNum &operator-=(int N);
+
+  TNum &operator*=(TNum &N);
+  TNum &operator*=(int N);
 };
 
 #endif
