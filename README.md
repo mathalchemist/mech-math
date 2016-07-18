@@ -17,6 +17,17 @@ There are lot of serious problems with the archive at [DMVN](http://dmvn.mexmat.
   4. `git push` it to remote repository.
   5. Create a pull-request to the master branch.
 
+### Example for dummies (Linux / OS X)
+  1. Open your terminal
+  2. `git clone https://github.com/MSU-Programming/mech-math.git`
+  3. `cd mech-math`
+  4. `git checkout -b SOME_GOOD_BRANCH_NAME`
+  5. Edit / create / delete files
+  6. `git add changed_file_1 changed_file_2 ...`
+  7. `git commit -m "Some really clever comment about your changes"`
+  8. `git push origin SOME_GOOD_BRANCH_NAME`
+  9. Go to GitHub page and create the pull-request
+
 ## What can I read?
   1. [C++ Tutorial](http://www.cplusplus.com/doc/tutorial/)
   2. [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
