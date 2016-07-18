@@ -2,7 +2,7 @@
 
 This repository is a base of all Mech-Math MSU programs which will help you not only to somehow pass 4 yeras of programming, but also to learn something.
 
-There are lot of serious problems with the archive at [DMVN](http://dmvn.mexmat.ru/prog.php):
+There are a lot of serious problems with the archive at [DMVN](http://dmvn.mexmat.ru/prog.php):
   1. Last time it was updated in 2006 since those times lots of contributions made by students were lost.
   2. The code in it is extremely trashy, so if you want to understand what's going on probably you will fail.
   3. Not all problems are covered.
