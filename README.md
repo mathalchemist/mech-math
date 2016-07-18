@@ -29,6 +29,7 @@ There are lot of serious problems with the archive at [DMVN](http://dmvn.mexmat.
   9. Go to GitHub page and create the pull-request
 
 ## What can I read?
+  0. [Git Tutorial](https://githowto.com/)
   1. [C++ Tutorial](http://www.cplusplus.com/doc/tutorial/)
   2. [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
   3. [Book on Algorithms](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.471.4772&rep=rep1&type=pdf)
