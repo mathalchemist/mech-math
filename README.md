@@ -10,6 +10,9 @@ There are a lot of serious problems with the archive at [DMVN](http://dmvn.mexma
   5. Most of code is written in C not C++ style.
   6. After Mech-Math you will not learn even basics of git which you definitely need in order to work in any group or even making solo projects.
 
+## Requests for code
+  If you need some problem solution or explanations, please check **Issues** section and if there is no similar request then open new **issue**.
+
 ## How to start contributing?
   1. `git clone` this repository to your local machine.
   2. Create a new branch with `git checkout -b NEW_BRANCH_NAME`.
