@@ -11,7 +11,7 @@ There are a lot of serious problems with the archive at [DMVN](http://dmvn.mexma
   6. After Mech-Math you will not learn even basics of git which you definitely need in order to work in any group or even making solo projects.
 
 ## Requests for code
-  If you need some problem solution or explanations, please check **Issues** section and if there is no similar request then open new **issue**.
+  If you need some problem's solution or explanations, please check [Issues](https://github.com/MSU-Programming/mech-math/issues) section and if there is no similar request then [open new issue](https://github.com/MSU-Programming/mech-math/issues/new).
 
 ## How to start contributing?
   1. `git clone` this repository to your local machine.
