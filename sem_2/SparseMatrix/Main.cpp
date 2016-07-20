@@ -22,31 +22,31 @@ public:
 typedef list<TCell> TList;
 typedef list<TCell>::iterator lit;
 
-class sm {
+class SparseMatrix {
 public:
   int w;
   int h;
 
   TList *r;
-  sm(int iw, int ih);
-  ~sm();
+  SparseMatrix(int iw, int ih);
+  ~SparseMatrix();
   void get_row(int i, double *row);
   void get_col(int i, double *col);
 
-  void sm::ex_rows(int y1, int y2);
-  void sm::ex_cols(int x1, int x2);
+  void SparseMatrix::ex_rows(int y1, int y2);
+  void SparseMatrix::ex_cols(int x1, int x2);
 
-  void sm::lin_comb(int y1, int y2, double lambda);
+  void SparseMatrix::lin_comb(int y1, int y2, double lambda);
 
   double ge(int x, int y);
   void se(int x, int y, double v);
 };
 
-sm::sm(int iw, int ih) : w(iw), h(ih) { r = new TList[h]; }
+SparseMatrix::SparseMatrix(int iw, int ih) : w(iw), h(ih) { r = new TList[h]; }
 
-sm::~sm() { delete[] r; }
+SparseMatrix::~SparseMatrix() { delete[] r; }
 
-double sm::ge(int x, int y) {
+double SparseMatrix::ge(int x, int y) {
   if (y >= h)
     return 0;
   if (x >= w)
@@ -57,7 +57,7 @@ double sm::ge(int x, int y) {
   return 0.0;
 }
 
-void sm::se(int x, int y, double v) {
+void SparseMatrix::se(int x, int y, double v) {
   if (y >= h)
     return;
   if (x >= w)
@@ -74,7 +74,7 @@ void sm::se(int x, int y, double v) {
   r[y].push_back(c);
 }
 
-void sm::get_row(int i, double *row) {
+void SparseMatrix::get_row(int i, double *row) {
   if (i >= h)
     return;
   for (int j = 0; j < w; j++)
@@ -83,7 +83,7 @@ void sm::get_row(int i, double *row) {
     row[it->i] = it->v;
 }
 
-void sm::get_col(int i, double *col) {
+void SparseMatrix::get_col(int i, double *col) {
   if (i >= h)
     return;
   for (int j = 0; j < w; j++)
@@ -101,7 +101,7 @@ void sm::get_col(int i, double *col) {
   }
 }
 
-void sm::ex_rows(int y1, int y2) {
+void SparseMatrix::ex_rows(int y1, int y2) {
   for (int i = 0; i < w; i++) {
     double v1 = ge(i, y1);
     double v2 = ge(i, y2);
@@ -110,7 +110,7 @@ void sm::ex_rows(int y1, int y2) {
   }
 }
 
-void sm::ex_cols(int x1, int x2) {
+void SparseMatrix::ex_cols(int x1, int x2) {
   for (int i = 0; i < h; i++) {
     double v1 = ge(x1, i);
     double v2 = ge(x2, i);
@@ -119,13 +119,13 @@ void sm::ex_cols(int x1, int x2) {
   }
 }
 
-void sm::lin_comb(int y1, int y2, double lambda) {
+void SparseMatrix::lin_comb(int y1, int y2, double lambda) {
   for (int i = 0; i < w; i++)
     se(i, y1, ge(i, y1) + lambda * ge(i, y2));
 }
 
 int main() {
-  sm m(10, 10);
+  SparseMatrix m(10, 10);
   m.se(1, 1, 1.0);
   m.se(1, 1, 2.0);
   printf("%1.5lf\n", m.ge(1, 1));
