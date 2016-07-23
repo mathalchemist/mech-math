@@ -1,25 +1,16 @@
 #include <stdio.h>
 #include "plot_x11.h"
 #include "math.h"
-#include "ss.h"
 
 #define F(i) fv[i - 1]
 #define X(i) x[i - 1]
 #define D(i) d[i - 1]
-#define A(i, j) aa[((i - 1 - 1) * (n - 2)) + (j - 1 - 1)]
-#define B(i) bb[(i - 1 - 1)]
+#define W(i) w[i - 1]
 
 // interpolation
 int N = 0;
 double a;
 double b;
-
-#define EM(i, j) em[(i - 1) * 4 + (j - 1)]
-
-double em[16];
-double exs[4]; // start
-double exe[4]; // end
-double eb[4];
 
 double coeff_y = 1;
 double coeff_x = 1;
@@ -28,64 +19,30 @@ double max = 0;
 double min = 0;
 
 double *x = 0;
+double *w = 0;
 double *fv = 0;
 double *d = 0;
-double *aa = 0;
-double *bb = 0;
-
-double f(double x) {
-  return 1.0 / (1.0 + x * x); // sin(4.0*x) + .25*delta(x,0.5);
-}
 
 double disp = 1.0;
+
 double delta(double x, double a) {
-  double p = (x - a) * (x - a) / disp;
-  if (p > 100)
-    return 0;
-  else
-    return exp(-p);
+  double ttt = -(x - a) * (x - a) / disp;
+  if (fabs(ttt) > 100)
+    return 0.0;
+  return exp(ttt);
 }
 
-void FreeMem() {
-  delete x;
-  delete fv;
-  delete d;
-  delete aa;
-  delete bb;
-}
-
-void GetMem(int n) {
-  x = new double[n];
-  fv = new double[n];
-  d = new double[n];
-  aa = new double[(n - 2) * (n - 2)];
-  bb = new double[n - 2];
+double f(double x) {
+  return
+      //    sqrt(fabs(x))
+      x * sin(x);
+  //+ .35*delta(x,0.5);
+  //    return sin(x)*x;
 }
 
 double FD(int i, int j) { return (F(j) - F(i)) / (X(j) - X(i)); }
 
-void GetMaxMin() {
-  max = 0.0;
-  min = 0.0;
-
-  for (double t = a; t <= b; t += 0.001) {
-    double y = f(t);
-    if (max < y)
-      max = y;
-    if (min > y)
-      min = y;
-  }
-  max += 0.1;
-  min -= 0.1;
-}
-
 double Par(int i, double t) {
-  if (i <= 3) {
-    return exs[0] * t * t * t + exs[1] * t * t + exs[2] * t + exs[3];
-  }
-  if (i >= N - 2) {
-    return exe[0] * t * t * t + exe[1] * t * t + exe[2] * t + exe[3];
-  }
   double c1 = F(i);
   double c2 = D(i);
   double dx = X(i + 1) - X(i);
@@ -98,96 +55,42 @@ double Par(int i, double t) {
 
 void GetNodesAndValues(int n) // from formula
 {
+  max = 0;
+  min = 0;
+
   for (int i = 1; i <= n; i++) {
     X(i) = a + (double(i - 1) / double(n - 1)) * (b - a);
     F(i) = f(X(i));
+
+    if (max < F(i))
+      max = F(i);
+    if (min > F(i))
+      min = F(i);
   }
-}
-
-void MakeMatrix(int n) {
-  for (int i = 0; i < (n - 2) * (n - 2); i++)
-    aa[i] = 0.0;
-  for (int i = 0; i < (n - 2); i++)
-    bb[i] = 0.0;
-
-  for (int i = 2; i <= n - 1; i++) {
-    if (i > 2)
-      A(i, i - 1) = X(i + 1) - X(i);
-    A(i, i) = 2.0 * (X(i + 1) - X(i - 1));
-    if (i < n - 1)
-      A(i, i + 1) = X(i) - X(i - 1);
-    B(i) = 3.0 * FD(i - 1, i) * (X(i + 1) - X(i)) +
-           3.0 * FD(i, i + 1) * (X(i) - X(i - 1));
+  for (int i = 2; i <= n - 1; i++)
+    W(i) = fabs(FD(i, i + 1) - FD(i - 1, i));
+  for (int i = 3; i <= n - 2; i++) {
+    if (W(i + 1) * W(i + 1) + W(i - 1) * W(i - 1) < 1e-50)
+      D(i) = ((X(i + 1) - X(i)) * FD(i - 1, i) +
+              (X(i) - X(i - 1)) * FD(i, i + 1)) /
+             (X(i + 1) - X(i - 1));
+    else
+      D(i) = (W(i + 1) * FD(i - 1, i) + W(i - 1) * FD(i, i + 1)) /
+             (W(i + 1) + W(i - 1));
   }
 }
 
 void Interpolate(int n) {
-  FreeMem();
-  GetMem(n);
+  delete x;
+  delete fv;
+  delete d;
+  delete w;
+  x = new double[n];
+  fv = new double[n];
+  d = new double[n];
+  w = new double[n];
 
-  GetMaxMin();
   GetNodesAndValues(n);
-  MakeMatrix(n);
-
-  double *ss = new double[n - 2];
-  SolveSystem(n - 2, aa, bb, ss);
-  for (int i = 2; i < n; i++)
-    D(i) = ss[i - 2 - 1];
-  delete ss;
-
-  EM(1, 1) = X(1) * X(1) * X(1);
-  EM(1, 2) = X(1) * X(1);
-  EM(1, 3) = X(1);
-  EM(1, 4) = 1.0;
-
-  EM(2, 1) = X(2) * X(2) * X(2);
-  EM(2, 2) = X(2) * X(2);
-  EM(2, 3) = X(2);
-  EM(2, 4) = 1.0;
-
-  EM(3, 1) = X(3) * X(3) * X(3);
-  EM(3, 2) = X(3) * X(3);
-  EM(3, 3) = X(3);
-  EM(3, 4) = 1.0;
-
-  EM(4, 1) = 3.0 * X(3) * X(3);
-  EM(4, 2) = 2.0 * X(3);
-  EM(4, 3) = X(3);
-  EM(4, 4) = 0.0;
-
-  eb[0] = F(1);
-  eb[1] = F(2);
-  eb[2] = F(3);
-  eb[3] = D(3);
-
-  SolveSystem(4, em, eb, exs);
-
-  EM(1, 1) = X(n - 2) * X(n - 2) * X(n - 2);
-  EM(1, 2) = X(n - 2) * X(n - 2);
-  EM(1, 3) = X(n - 2);
-  EM(1, 4) = 1.0;
-
-  EM(2, 1) = X(n - 1) * X(n - 1) * X(n - 1);
-  EM(2, 2) = X(n - 1) * X(n - 1);
-  EM(2, 3) = X(n - 1);
-  EM(2, 4) = 1.0;
-
-  EM(3, 1) = X(n) * X(n) * X(n);
-  EM(3, 2) = X(n) * X(n);
-  EM(3, 3) = X(n);
-  EM(3, 4) = 1.0;
-
-  EM(4, 1) = 3.0 * X(n - 2) * X(n - 2);
-  EM(4, 2) = 2.0 * X(n - 2);
-  EM(4, 3) = X(n - 2);
-  EM(4, 4) = 0.0;
-
-  eb[0] = F(n - 2);
-  eb[1] = F(n - 1);
-  eb[2] = F(n);
-  eb[3] = D(n - 2);
-
-  SolveSystem(4, em, eb, exe);
 }
 
 int MX(double x) {
@@ -251,7 +154,7 @@ void DrawWindowContent() {
 
   char str[256];
   WSetColor(RED);
-  sprintf(str, "Difference: %1.20lf", diff);
+  sprintf(str, "Difference: %1.10lf", diff);
   WDrawString(str, 10, 40);
 }
 
@@ -283,7 +186,7 @@ int KeyPressFunction(int nKeySym) {
     Interpolate(N);
     break;
   case XK_F6:
-    if (N > 8)
+    if (N > 6)
       N /= 2;
     Interpolate(N);
     break;
@@ -308,21 +211,30 @@ int main() {
   if (N < 3)
     return 0;
 
-  GetMem(N);
+  x = new double[N];
 
   //    printf("Enter left edge: ");
   //    scanf("%e", &a);
   //    printf("Enter right edge: ");
   //    scanf("%e", &b);
-  a = -1.0;
-  b = 1.0;
+  a = -10.0;
+  b = 10.0;
   if (a >= b)
     return 0;
 
   Interpolate(N);
+  printf("w: \n");
+  for (int i = 1; i <= N; i++)
+    printf("%1.5lf, ", W(i));
+  printf("d: \n");
+  for (int i = 1; i <= N; i++)
+    printf("%1.5lf, ", D(i));
+  printf("\n");
 
   printf("Retcode: %d", DrawWindow(DrawWindowContent, KeyPressFunction));
-
-  FreeMem();
+  delete x;
+  delete fv;
+  delete d;
+  delete w;
   return 0;
 }
