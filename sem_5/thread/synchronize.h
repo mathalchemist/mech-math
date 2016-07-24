@@ -1,1 +1,1 @@
-void synchronize (int total_threads);
+void synchronize(int total_threads);
