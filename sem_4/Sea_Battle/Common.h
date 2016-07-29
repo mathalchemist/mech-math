@@ -5,7 +5,7 @@
 // =====================================
 
 // Sea battle common decls
-TXWin * XWin;
+TXWin *XWin;
 
 bool HeIsReady = false;
 bool EndedByOtherSide = false;
@@ -20,7 +20,7 @@ int GameState = GS_INPUT;
 
 const int SIZE = 16;
 const int MAX = 256;
-const int D=7;
+const int D = 7;
 
 int MyField[10][10];
 int HisField[10][10];
@@ -43,5 +43,5 @@ void SigHandler(int);
 void NetworkHandler(int Socket);
 int KeyHandler(int Socket);
 void ExposeHandler();
-bool WaitMessage(int Socket, int * Buffer);
+bool WaitMessage(int Socket, int *Buffer);
 bool Working = true;

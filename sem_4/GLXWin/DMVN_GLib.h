@@ -21,7 +21,8 @@
 // Don't forget to compile program with g++ compiler, because
 // C language (but not C++) doesn't support NEW and DELETE operators.
 // Compilation:
-// g++ Program.cpp DMVN_XLib.cpp -Wall -O0 -I/usr/X11R6/include -L/usr/X11R6/lib -lX11 -o Program.exe
+// g++ Program.cpp DMVN_XLib.cpp -Wall -O0 -I/usr/X11R6/include -L/usr/X11R6/lib
+// -lX11 -o Program.exe
 // Also add include file <DMVN_XLib.h> to your program.
 
 #include <X11/Xlib.h>
@@ -38,70 +39,55 @@
 
 typedef unsigned long DWORD;
 
-enum RGBModes
-{
-    RGB_555,
-    RGB_565,
-    RGB_888
-};
+enum RGBModes { RGB_555, RGB_565, RGB_888 };
 
 DWORD RGB(int R, int G, int B);
 
-enum EventTypes
-{
-    ET_UNKNOWN,
-    ET_EXPOSE,
-    ET_KEYPRESS,
-    ET_BUTTONPRESS
+enum EventTypes { ET_UNKNOWN, ET_EXPOSE, ET_KEYPRESS, ET_BUTTONPRESS };
+
+enum MouseButtons {
+  MB_UNKNOWN,
+  MB_LEFT,
+  MB_MIDDLE,
+  MB_RIGHT,
+  MB_MWHEELUP,
+  MB_MWHEELDOWN
 };
 
-enum MouseButtons
-{
-    MB_UNKNOWN,
-    MB_LEFT,
-    MB_MIDDLE,
-    MB_RIGHT,
-    MB_MWHEELUP,
-    MB_MWHEELDOWN
-};
-
-class TMouseInfo
-{
+class TMouseInfo {
 public:
-    int X;
-    int Y;
-    int Button;
+  int X;
+  int Y;
+  int Button;
 };
 
-class TKeyInfo
-{
+class TKeyInfo {
 public:
-    char KeyCode;
-    DWORD KeyData;
+  char KeyCode;
+  DWORD KeyData;
 };
 
-class TXWin
-{
-    bool GLSwap;
-    bool GLContextCreated;
-    XVisualInfo * GLVisual;
-    GLXContext GLContext;
-    Display * Disp;
-    int Scr;
-    Window Win;
-    GC GContext;
-    bool XInitialized;
-    bool ErrorPresent;    
-    bool Initialized;
-    
+class TXWin {
+  bool GLSwap;
+  bool GLContextCreated;
+  XVisualInfo *GLVisual;
+  GLXContext GLContext;
+  Display *Disp;
+  int Scr;
+  Window Win;
+  GC GContext;
+  bool XInitialized;
+  bool ErrorPresent;
+  bool Initialized;
+
 public:
-    TXWin(char * Title, int X, int Y, int Width, int Height, int RGBMode);
-    ~TXWin(void);
-    bool Error(void) { return ErrorPresent; }
-    void GetEvent(int * EventType, TKeyInfo * KeyInfo, TMouseInfo * MouseInfo);
-    void DrawPoint(int X, int Y, DWORD Color);
-    void DrawLine(int X1, int Y1, int X2, int Y2, DWORD Color);
-    void FillRect(int X, int Y, int Width, int Height);
+  TXWin(char *Title, int X, int Y, int Width, int Height, int RGBMode);
+  ~TXWin(void);
+  bool Error(void) { return ErrorPresent; }
+  void GetEvent(int *EventType, TKeyInfo *KeyInfo, TMouseInfo *MouseInfo);
+  void DrawPoint(int X, int Y, DWORD Color);
+  void DrawLine(int X1, int Y1, int X2, int Y2, DWORD Color);
+  void FillRect(int X, int Y, int Width, int Height);
 };
 
 #endif
