@@ -14,12 +14,12 @@
 
 #include "str.h"
 
-#define YYSTYPE string  
+#define YYSTYPE string
 
-#include "calc.tab.hpp"   /* File generated automatically by bison: */
+#include "calc.tab.hpp" /* File generated automatically by bison: */
                         /* contains the definitions of terminals  */
 
-int yylex();              /* Prototype of the scanner function "next lexeme" */
-int yyerror(const char*); /* Prototype of the error diagnostics function     */
+int yylex();               /* Prototype of the scanner function "next lexeme" */
+int yyerror(const char *); /* Prototype of the error diagnostics function     */
 
 #endif

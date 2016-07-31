@@ -9,47 +9,35 @@
 // An ABSTRACT class representing a key in TreeSet
 class TreeSetKey {
 public:
-    TreeSetKey() {}
-    virtual ~TreeSetKey() {}    // virtual destructor
+  TreeSetKey() {}
+  virtual ~TreeSetKey() {} // virtual destructor
 
-    // Abstract class has virtual methods unimplemented
+  // Abstract class has virtual methods unimplemented
 
-    // The keys can be compared
-    virtual int compareTo(const TreeSetKey&) const = 0;
+  // The keys can be compared
+  virtual int compareTo(const TreeSetKey &) const = 0;
 
-    bool operator==(const TreeSetKey& k) const {
-        return (compareTo(k) == 0);
-    }
-    bool operator!=(const TreeSetKey& k) const {
-        return (compareTo(k) != 0);
-    }
-    bool operator<(const TreeSetKey& k) const {
-        return (compareTo(k) < 0);
-    }
-    bool operator<=(const TreeSetKey& k) const {
-        return (compareTo(k) <= 0);
-    }
-    bool operator>(const TreeSetKey& k) const {
-        return (compareTo(k) > 0);
-    }
-    bool operator>=(const TreeSetKey& k) const {
-        return (compareTo(k) >= 0);
-    }
+  bool operator==(const TreeSetKey &k) const { return (compareTo(k) == 0); }
+  bool operator!=(const TreeSetKey &k) const { return (compareTo(k) != 0); }
+  bool operator<(const TreeSetKey &k) const { return (compareTo(k) < 0); }
+  bool operator<=(const TreeSetKey &k) const { return (compareTo(k) <= 0); }
+  bool operator>(const TreeSetKey &k) const { return (compareTo(k) > 0); }
+  bool operator>=(const TreeSetKey &k) const { return (compareTo(k) >= 0); }
 
-    // The virtual method "clone" must allocate a copy of the object
-    // in the dynamic memory. In any derived class Foo it must
-    // be always implemented in the following way:
-    // virtual Foo* clone() const { return new Foo(*this); }
-    //
-    virtual TreeSetKey* clone() const = 0;
+  // The virtual method "clone" must allocate a copy of the object
+  // in the dynamic memory. In any derived class Foo it must
+  // be always implemented in the following way:
+  // virtual Foo* clone() const { return new Foo(*this); }
+  //
+  virtual TreeSetKey *clone() const = 0;
 };
 
 // An ABSTRACT class representing a value of a key in TreeSet
 class TreeSetValue {
 public:
-    TreeSetValue() {}
-    virtual ~TreeSetValue() {}
-    virtual TreeSetValue* clone() const = 0;
+  TreeSetValue() {}
+  virtual ~TreeSetValue() {}
+  virtual TreeSetValue *clone() const = 0;
 };
 
 //
@@ -59,88 +47,62 @@ public:
 //
 // The implementation is based on the Red-Black Tree
 //
-class TreeSet: protected RBTree {
+class TreeSet : protected RBTree {
 public:
-    class Pair: public RBTreeNodeValue {
-    public:
-        const TreeSetKey* key;
-        TreeSetValue* value;
+  class Pair : public RBTreeNodeValue {
+  public:
+    const TreeSetKey *key;
+    TreeSetValue *value;
 
-        Pair():
-            RBTreeNodeValue(),
-            key(0),
-            value(0)
-        {}
-        Pair(const TreeSetKey* k, TreeSetValue* v):
-            RBTreeNodeValue(),
-            key(k),
-            value(v)
-        {}
+    Pair() : RBTreeNodeValue(), key(0), value(0) {}
+    Pair(const TreeSetKey *k, TreeSetValue *v)
+        : RBTreeNodeValue(), key(k), value(v) {}
 
-        virtual int compareTo(const RBTreeNodeValue& p) const {
-            return key->compareTo(
-                *((const Pair&) p).key
-            );
-        }
-    };
-
-    // Add a pair (key, value) to the set
-    void add(const TreeSetKey* k, const TreeSetValue* v = 0);
-
-    void remove(const TreeSetKey* key);
-
-    // Return a value of a key
-    TreeSetValue* value(const TreeSetKey* k) const;
-
-    TreeSetValue* operator[](const TreeSetKey* k) const {
-        return value(k);
+    virtual int compareTo(const RBTreeNodeValue &p) const {
+      return key->compareTo(*((const Pair &)p).key);
     }
+  };
 
-    bool contains(const TreeSetKey* k) const;
+  // Add a pair (key, value) to the set
+  void add(const TreeSetKey *k, const TreeSetValue *v = 0);
 
-    int size() { return RBTree::size(); }
+  void remove(const TreeSetKey *key);
 
-    class const_iterator: public RBTree::const_iterator {
-    public:
-        const_iterator(const RBTree::const_iterator& i):
-            RBTree::const_iterator(i)
-        {}
+  // Return a value of a key
+  TreeSetValue *value(const TreeSetKey *k) const;
 
-        const Pair& operator*() const { // Dereference
-            return *((const Pair*) node->value);
-        }
-        const Pair* operator->() const {
-            return &(operator*());
-        }
-    };
+  TreeSetValue *operator[](const TreeSetKey *k) const { return value(k); }
 
-    class iterator: public RBTree::iterator {
-    public:
-        iterator(const RBTree::iterator& i):
-            RBTree::iterator(i)
-        {}
+  bool contains(const TreeSetKey *k) const;
 
-        Pair& operator*() const { // Dereference
-            return *((Pair*) node->value);
-        }
-        Pair* operator->() const {
-            return &(operator*());
-        }
-    };
+  int size() { return RBTree::size(); }
 
-    const_iterator begin() const {
-        return RBTree::begin();
+  class const_iterator : public RBTree::const_iterator {
+  public:
+    const_iterator(const RBTree::const_iterator &i)
+        : RBTree::const_iterator(i) {}
+
+    const Pair &operator*() const { // Dereference
+      return *((const Pair *)node->value);
     }
-    const_iterator end() const {
-        return RBTree::end();
-    }
+    const Pair *operator->() const { return &(operator*()); }
+  };
 
-    iterator begin() {
-        return RBTree::begin();
+  class iterator : public RBTree::iterator {
+  public:
+    iterator(const RBTree::iterator &i) : RBTree::iterator(i) {}
+
+    Pair &operator*() const { // Dereference
+      return *((Pair *)node->value);
     }
-    iterator end() {
-        return RBTree::end();
-    }
+    Pair *operator->() const { return &(operator*()); }
+  };
+
+  const_iterator begin() const { return RBTree::begin(); }
+  const_iterator end() const { return RBTree::end(); }
+
+  iterator begin() { return RBTree::begin(); }
+  iterator end() { return RBTree::end(); }
 };
 
 #endif

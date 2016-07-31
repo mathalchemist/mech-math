@@ -9,16 +9,24 @@
 
 #include <string.h>
 
-class string
-{
-  public:
+class string {
+public:
   char s[1000];
-  string() { s[0]=0; }
-  string(char * ss) { strcpy(s,ss); }
-  string(string& ss) { strcpy(s,ss.s); }
-  string& operator = (const char* ss) { strcpy(s, ss); return *this; }
-  string& operator = (const string& ss) { strcpy(s, ss.s); return *this; }
-  string& operator += (const string& ss) { strcat(s, ss.s); return *this; } 
+  string() { s[0] = 0; }
+  string(char *ss) { strcpy(s, ss); }
+  string(string &ss) { strcpy(s, ss.s); }
+  string &operator=(const char *ss) {
+    strcpy(s, ss);
+    return *this;
+  }
+  string &operator=(const string &ss) {
+    strcpy(s, ss.s);
+    return *this;
+  }
+  string &operator+=(const string &ss) {
+    strcat(s, ss.s);
+    return *this;
+  }
 };
 
 #endif
