@@ -32,7 +32,7 @@ There are a lot of serious problems with the archive at [DMVN](http://dmvn.mexma
   9. Go to GitHub page and create the pull-request
 
 ## What can I read?
-  1. [Git Tutorial 1](https://githowto.com/), [Git Tutorial 2](https://www.atlassian.com/git/tutorials)
+  1. [Git Tutorial](https://www.atlassian.com/git/tutorials)
   2. [C++ Tutorial](http://www.cplusplus.com/doc/tutorial/)
   3. [Makefiles Tutorial](http://mrbook.org/blog/tutorials/make/)
   4. [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
